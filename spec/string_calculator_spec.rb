@@ -38,4 +38,18 @@ RSpec.describe StringCalculator do
       expect(StringCalculator.add("2,1001")).to eq(2)
     end
   end
+
+  describe ".get_called_count" do
+    it "returns the number of times add was called" do
+      # Reset call count at the start of test
+      StringCalculator.reset_called_count if StringCalculator.respond_to?(:reset_called_count)
+
+      expect(StringCalculator.get_called_count).to eq(0)
+
+      StringCalculator.add("1,2")
+      StringCalculator.add("3,4")
+
+      expect(StringCalculator.get_called_count).to eq(2)
+    end
+  end
 end

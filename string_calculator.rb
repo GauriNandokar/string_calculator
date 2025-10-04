@@ -1,5 +1,9 @@
 class StringCalculator
+  @@call_count = 0   # class variable to track calls
+
   def self.add(numbers)
+    @@call_count += 1  # increment every time add is called
+
     return 0 if numbers.empty?
 
     if numbers.start_with?("//")
@@ -15,5 +19,13 @@ class StringCalculator
     nums = nums.select { |n| n <= 1000 }
 
     nums.sum
+  end
+
+  def self.get_called_count
+    @@call_count
+  end
+
+  def self.reset_called_count
+    @@call_count = 0
   end
 end
