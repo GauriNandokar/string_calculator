@@ -19,11 +19,15 @@ class StringCalculator
     nums = []
 
     if numbers.start_with?("//")
-      # Check for any-length delimiter in square brackets
-      if numbers =~ %r{//\[(.+)\]\n}
-        delimiter = $1
+      # Multiple delimiters in square brackets: //[delim1][delim2]\n
+      if numbers =~ %r{//(\[.+\])+\n}
+        # Extract all delimiters inside brackets
+        delimiters = numbers.scan(/\[(.+?)\]/).flatten
         numbers = numbers.split("\n", 2).last
-        nums = numbers.split(delimiter).map(&:to_i)
+
+        # Build regex to split by multiple delimiters
+        regex = Regexp.union(delimiters)
+        nums = numbers.split(regex).map(&:to_i)
       else
         # Single-character delimiter (old behavior)
         delimiter, numbers = numbers[2], numbers[4..]
