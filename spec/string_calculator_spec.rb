@@ -52,4 +52,26 @@ RSpec.describe StringCalculator do
       expect(StringCalculator.get_called_count).to eq(2)
     end
   end
+
+  describe "AddOccured event" do
+    before(:each) do
+      StringCalculator.reset_callbacks
+    end
+
+    it "triggers AddOccured after add is called" do
+      triggered_input = nil
+      triggered_result = nil
+
+      StringCalculator.on_add_occurred do |input, result|
+        triggered_input = input
+        triggered_result = result
+      end
+
+      result = StringCalculator.add("1,2,3")
+
+      expect(triggered_input).to eq("1,2,3")
+      expect(triggered_result).to eq(6)
+      expect(result).to eq(6)
+    end
+  end
 end
