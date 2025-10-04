@@ -14,13 +14,23 @@ class StringCalculator
 
   def self.add(numbers)
     @@call_count += 1  # increment every time add is called
-
     return 0 if numbers.empty?
 
+    nums = []
+
     if numbers.start_with?("//")
-      delimiter, numbers = numbers[2], numbers[4..]
-      nums = numbers.split(delimiter).map(&:to_i)
+      # Check for any-length delimiter in square brackets
+      if numbers =~ %r{//\[(.+)\]\n}
+        delimiter = $1
+        numbers = numbers.split("\n", 2).last
+        nums = numbers.split(delimiter).map(&:to_i)
+      else
+        # Single-character delimiter (old behavior)
+        delimiter, numbers = numbers[2], numbers[4..]
+        nums = numbers.split(delimiter).map(&:to_i)
+      end
     else
+      # Default delimiters: comma or newline
       nums = numbers.split(/,|\n/).map(&:to_i)
     end
 
